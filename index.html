@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal Prediction</title>
+</head>
+<body>
+    <h1>Job Portal Prediction</h1>
+    <form id="prediction-form">
+        <label for="user_input">Enter your query:</label><br>
+        <textarea id="user_input" name="user_input" rows="4" cols="50"></textarea><br>
+        <button type="submit">Predict</button>
+    </form>
+    <p id="prediction-result"></p>
+
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const userInput = document.getElementById('user_input').value;
+            
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 'User Input': userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('prediction-result').innerText = 'Prediction: ' + data.Prediction;
+            })
+            .catch(error => {
+                document.getElementById('prediction-result').innerText = 'Error: ' + error;
+            });
+        });
+    </script>
+</body>
+</html>
